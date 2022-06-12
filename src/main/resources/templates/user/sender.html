@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文件</title>
+</head>
+<body>
+<!--<link href="//unpkg.com/layui@2.6.12/dist/css/layui.css" rel="stylesheet"/>>-->
+
+<!--&lt;!&ndash; 引入 layui.js &ndash;&gt;-->
+<!--<script src="//unpkg.com/layui@2.6.12/dist/layui.js"/>-->
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+<div>
+    <form id="content">
+        <input type="text" name="title"  id="title" placeholder="输入你要发送的标题" style="width: 100%" /><br/><br/>
+        <input type="email" name="email" placeholder="输入你的邮箱" id="email" style="width: 100%"/><br/><br/>
+        <textarea name="" required lay-verify="required" placeholder="请输入" class="message" id="message" style="width: 100%"></textarea><br/>
+    </form>
+<!--    <form class="layui-form" action="">-->
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">输入框</label>-->
+<!--            <div class="layui-input-block">-->
+<!--                <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input" id="title">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">输入你要发送的邮箱</label>-->
+<!--            <div class="layui-input-block">-->
+<!--                <input type="email" name="email" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input" id="email">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">输入你要发送的内容</label>-->
+<!--            <div class="layui-input-block">-->
+<!--                <textarea name="message" required lay-verify="required" placeholder="请输入" class="message" id="message"></textarea>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </form>-->
+</div>
+<div style="padding: 30px">
+    <input type="file" id="fileInput">
+    <div style="margin: 20px 0">
+        <button onclick="upload()">上传文件</button>
+    </div>
+    <div id="url"></div>
+</div>
+<button type="submit"  id="btn" >发送</button>
+<script>
+    let fileInput;
+    let fd;
+    function upload() {
+        // 获取input 选择的的文件
+        fileInput= document.getElementById('fileInput')
+        fd = new FormData()
+        fd.append('file', fileInput.files[0])
+        fetch('http://localhost:8080/users/upload', {
+            method: 'POST',
+            body: fd
+        }).then(res => res.json()).then(res => {
+            // 要求后台返回的数据必须是json
+            console.log(res)  //
+            document.getElementById("url").innerText = `上传成功，文件url: ${res.url}`
+        })
+    }
+    $("#btn").on("click", function () {
+        $.ajax({
+            url: "/mail/senderAttachFile",
+            type: "POST",
+            data: {
+                email: $("#email").val(),
+                title:$("#title").val(),
+                message: $("#message").val(),
+                name:$("#name").val(),
+            },
+            resultType: "JSON",
+            success: function (result) {
+                alert(result.message);
+                if (200 == result.code) {
+                   console.log("发送成功")
+                }
+            },
+            error: function (result) {
+            }
+        });
+    });
+
+
+</script>
+</body>
+</html>
+

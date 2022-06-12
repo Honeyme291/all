@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.all.mapper.UserMapper">
+    <insert id="insertUser" parameterType="User">
+       insert into login(email, password, salt, confirm_code, activation_time, is_valid)
+       values (#{email},#{password},#{salt},#{confirmCode},#{activationTime},#{isValid})
+    </insert>
+    <select id="selectUserByEmail" parameterType="String" resultType="User">
+        SELECT email, password, salt ,perms FROM login WHERE email = #{email} AND is_valid = 1
+    </select>
+    <select id="selectUserByConfirmCode" parameterType="String" resultType="User">
+        SELECT email, activation_time FROM login WHERE confirm_code = #{confirmCode} AND is_valid = 0
+    </select>
+    <update id="updateUserByConfirmCode" parameterType="String">
+        UPDATE login SET is_valid = 1 WHERE confirm_code = #{confirmCode}
+    </update>
+</mapper>

@@ -1,0 +1,39 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/users?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: 
+  mail:
+    protocol: smtp # 邮件协议
+    host: smtp.163.com # 网易邮箱 smtp 服务器地址
+    port: 25
+    username: java_mail01@163.com # 发件人邮箱地址
+    password:  # 授权码
+    default-encoding: utf-8 # 编码字符集
+    properties:
+      mail:
+        debug: true # 开启 debug 模式以后会完整打印邮件发送过程的日志
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    check-template-location: true
+    cache: false
+    mvc:
+      static-path-pattern: /**
+  resources:
+    static-locations=classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/:
+
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true # 开启驼峰映射
+
+#服务器端口
+server:
+   port: 8080
+#  netty服务端口和webSocket path
+netty:
+   port: 61220
+   path: /chat
+
